@@ -1,0 +1,107 @@
+[gd_scene load_steps=4 format=3 uid="uid://bilrfih7kr87w"]
+
+[ext_resource type="Script" path="res://addons/gd-openai-coding/dock.gd" id="1_jlg3l"]
+[ext_resource type="Script" path="res://addons/gd-openai/connector.gd" id="2_b0iyi"]
+[ext_resource type="PackedScene" uid="uid://cw4gufo6ot815" path="res://addons/gd-openai-coding/scenes/explain.tscn" id="3_5u3t5"]
+
+[node name="GD OpenAI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_jlg3l")
+
+[node name="OpenAiApiRequest" type="HTTPRequest" parent="."]
+script = ExtResource("2_b0iyi")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainTabs" type="TabContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Q&A" type="VBoxContainer" parent="VBoxContainer/MainTabs"]
+layout_mode = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer/MainTabs/Q&A"]
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = 100
+
+[node name="Question" type="TextEdit" parent="VBoxContainer/MainTabs/Q&A/VSplitContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 2.08165e-12)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Your question"
+wrap_mode = 1
+
+[node name="Answer" type="TextEdit" parent="VBoxContainer/MainTabs/Q&A/VSplitContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Answer by AI"
+wrap_mode = 1
+
+[node name="Submit" type="Button" parent="VBoxContainer/MainTabs/Q&A"]
+layout_mode = 2
+text = "Submit"
+
+[node name="Explain" parent="VBoxContainer/MainTabs" instance=ExtResource("3_5u3t5")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Settings" type="VBoxContainer" parent="VBoxContainer/MainTabs"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MainTabs/Settings"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Q&A instruction"
+
+[node name="QAPrompt" type="TextEdit" parent="VBoxContainer/MainTabs/Settings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Instructions for the AI on how to answer."
+text = "
+You are a Godot engine 4.x developer using GDScript 2.0.
+
+You task is to write some code based on the user input.
+
+You task is to write some code based on the user input.
+
+All code samples have pattern
+
+```gdscript
+code
+```
+"
+placeholder_text = "Instruction for the AI on how to react to the user question."
+wrap_mode = 1
+scroll_vertical = 13.0
+
+[node name="Reload" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Reload plugin"
+
+[connection signal="data_received" from="OpenAiApiRequest" to="." method="_on_open_ai_api_request_data_received"]
+[connection signal="error_response" from="OpenAiApiRequest" to="." method="_on_open_ai_api_request_error_response"]
+[connection signal="tab_changed" from="VBoxContainer/MainTabs" to="." method="_on_tab_container_tab_changed"]
+[connection signal="pressed" from="VBoxContainer/MainTabs/Q&A/Submit" to="." method="_on_submit_pressed"]
