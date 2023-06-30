@@ -1,15 +1,18 @@
 @tool
 extends EditorPlugin
 
+var depends_on:String = "addons/gd-openai"
+
 var dock
 
 var ei = get_editor_interface()
 
 func _enable_plugin():
 	# FIXME: How to cancel enabling this plugin
-	#        when `gd-openai` is not available or enabled?
-	if not ei.is_plugin_enabled('gd-openai'):
-		print("No gd-openai plugin found. Please enable.")
+	#        when `gd-openai` is not available?
+	var da:DirAccess = DirAccess.open("res://")
+	if not da.dir_exists(depends_on):
+		printerr("***\n\nAddon '%s' not found.\nPlease download '%s' through the AssetLib.\n\n***" % [depends_on, depends_on])
 
 func _enter_tree():
 	dock = preload("res://addons/gd-openai-coding/dock.tscn").instantiate()
