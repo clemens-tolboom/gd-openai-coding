@@ -93,7 +93,6 @@ code
 "
 placeholder_text = "Instruction for the AI on how to react to the user question."
 wrap_mode = 1
-scroll_vertical = 13.0
 
 [node name="Reload" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true

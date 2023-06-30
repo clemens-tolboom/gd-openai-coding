@@ -29,6 +29,6 @@ func _disable_plugin():
 	pass
 
 func reload():
-	print(" Reloading GD OpenAI coding.")
+	print("Reloading GD OpenAI coding.")
 	_exit_tree()
 	_enter_tree()
